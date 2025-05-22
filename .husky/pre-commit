@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+case "$(uname -s)" in
+    MINGW*|MSYS*)
+        powershell.exe -ExecutionPolicy Bypass -NoProfile -File "$(dirname -- "$0")/pre-commit.ps1"
+        ;;
+    *)
+    npm run format
+    npm run lint
+    ;;
+esac

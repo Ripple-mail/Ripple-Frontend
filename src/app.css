@@ -1,0 +1,32 @@
+@font-face {
+	font-family: 'Barlow';
+	src: url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+}
+:root {
+	--text-primary-color: #e0f7fa;
+	--text-secondary-color: #80deea;
+	--surface-color: #001f2d;
+	--alt-surface-color: #003047;
+	--surface-hover-color: #012a3a;
+	--alt-surface-hover-color: #01475d;
+	--nav-blur-surface-color: rgba(0, 12, 22, 0.5);
+	--border-color: #014f63;
+	--primary-color: #00b3b3;
+	--secondary-color: #4db6ac;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	background-color: var(--surface-color);
+	color: var(--text-primary-color);
+	font-family: Barlow, sans-serif;
+}
+
+.container {
+	font-family: Barlow, sans-serif;
+	color: var(--text-primary-color);
+	background-color: var(--surface-color);
+}
