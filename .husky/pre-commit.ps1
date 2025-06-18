@@ -5,7 +5,6 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
-# Run linting
 Write-Host "Running linter..." -ForegroundColor Cyan
 & npm run lint
 if ($LASTEXITCODE -ne 0) {
