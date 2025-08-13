@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <style>
+            :root {
+                --text-primary-color: #f0f7fa;
+                --text-secondary-color: #bbb;
+                --surface-color: #121212;
+                --alt-surface-color: #1b1b1b;
+                --sidebar-color: #1f1f1f;
+                --sidebar-nav-color: #2a2a2a;
+                --topbar-color: #222;
+                --border-primary-color: #282828;
+                --border-secondary-color: #383838;
+                --scrollbar-color: #2a2a2a;
+                --box-shadow: rgba(0, 0, 0, 0.1);
+            }
+
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                background-color: var(--surface-color);
+                color: var(--text-primary-color);
+                font-family: Barlow, sans-serif;
+            }
+
+            .container {
+                font-family: Barlow, sans-serif;
+                color: var(--text-primary-color);
+                background-color: var(--surface-color);
+            }
+
+            :global(body) {
+                margin: 0;
+                font-family: system-ui, sans-serif;
+                color: var(--text-primary-color);
+            }
+
+            /* Scrollbar */
+            :global(html) {
+                scrollbar-width: thin;
+                scrollbar-color: var(--scrollbar-color) transparent;
+            }
+
+            /* Scrollbar webkit -- Chromium browsers and Safari (webkit based) */
+            :global(::-webkit-scrollbar) {
+                width: 10px;
+            }
+
+            :global(::-webkit-scrollbar-track) {
+                background: transparent;
+            }
+
+            :global(::-webkit-scrollbar-thumb) {
+                background-color: transparent;
+                border-radius: 5px;
+                border: 2px solid var(--scrollbar-color);
+            }
+
+            .site-container {
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+            }
+
+            .another-container {
+                display: flex;
+                height: 100vh;
+            }
+
+            .sidebar {
+                width: 220px;
+                background-color: var(--sidebar-color);
+                padding: 1rem;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .logo-link {
+                text-decoration: none;
+            }
+
+            .logo-link:hover {
+                text-decoration: none;
+            }
+
+            .logo {
+                color: #fff;
+                font-size: 1.2rem;
+                margin-bottom: 2rem;
+                user-select: none;
+            }
+
+            .nav-item {
+                display: block;
+                padding: 0.5rem 0;
+                text-indent: 10px;
+                color: var(--text-secondary-color);
+                text-decoration: none;
+                border-radius: 10px;
+                user-select: none;
+            }
+
+            .nav-item:hover, .nav-item.active {
+                color: var(--text-primary-color);
+                background-color: var(--sidebar-nav-color);
+                text-decoration: none;
+            }
+
+            .nav-item.disabled {
+                cursor: not-allowed;
+            }
+
+            .main-container {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                background-color: #181818;
+            }
+
+            .inbox-container {
+                display: flex;
+                height: 100vh;
+            }
+
+            .main {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                background-color: #181818;
+            }
+
+            .main-content {
+                display: flex;
+                flex: 1;
+                overflow: hidden;
+            }
+
+            .topbar {
+                display: flex;
+                align-items: center;
+                padding: 0.75rem 1rem;
+                background-color: var(--topbar-color);
+                border-bottom: 2px solid var(--border-primary-color);
+            }
+
+            .search {
+                flex: 1;
+                padding: 0.5rem;
+                border-radius: 4px;
+                border: none;
+                background-color: var(--sidebar-nav-color);
+                color: #eee;
+                cursor: not-allowed;
+            }
+
+            .search::placeholder {
+                color: #999;
+            }
+
+            .profile {
+                margin-left: 1rem;
+                background-color: #444;
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #eee;
+                font-weight: bold;
+                font-size: 0.9rem;
+                cursor: pointer;
+            }
+
+            .email-list {
+                flex: 1;
+                overflow-y: auto;
+                border-right: 1px solid var(--topbar-color);
+                min-width: unset;
+                background-color: #181818;
+            }
+
+            .email-item {
+                display: flex;
+                align-items: center;
+                padding: 0.75rem 1rem;
+                border-bottom: 1px solid var(--topbar-color);
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+
+            .email-item:hover {
+                background-color: #242424;
+            }
+
+            .email-item.unread {
+                background-color: #202020;
+                font-weight: bold;
+            }
+
+            .email-sender {
+                width: 150px;
+                flex-shrink: 0;
+                max-width: 18ch;
+                overflow: clip;
+                text-overflow: ellipsis;
+            }
+
+            .email-content {
+                flex: 1;
+                overflow: hidden;
+            }
+
+            .email-subject {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .email-snippet {
+                font-size: 0.85rem;
+                color: #999;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .email-time {
+                margin-left: 1rem;
+                color: #777;
+                font-size: 0.8rem;
+                cursor: help;
+            }
+
+            a {
+                color: inherit;
+                text-decoration: none;
+            }
+
+            a:hover {
+                text-decoration: underline;
+            }
+
+            .drag-handle {
+                width: 5px;
+                cursor: col-resize;
+                background-color: var(--border-primary-color);
+            }
+
+            .drag-handle:hover {
+                background-color: var(--border-secondary-color);
+                user-select: none;
+            }
+
+            .reading-pane {
+                flex: 1;
+                padding: 1rem;
+                overflow-y: auto;
+                background-color: #1c1c1c;
+            }
+
+            .reading-pane h2 {
+                margin: 0;
+                font-size: 1.5rem;
+            }
+
+            .reading-pane h4 {
+                color: #999;
+                font-weight: normal;
+                margin-top: 0.5rem;
+            }
+
+            .reading-pane p {
+                margin-top: 1rem;
+                line-height: 1.6;
+                color: #ddd;
+            }
+
+            .reading-pane.placeholder {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #666;
+                font-size: 1.1rem;
+            }
+
+            .pane-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            /* .pane-header button {
+                background: #333;
+                color: white;
+                border: none;
+                padding: 0.5rem 0.75rem;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+
+            .pane-header button:hover {
+                background: #444;
+            } */
+
+            .open-tab {
+                background: #333;
+                color: white;
+                border: none;
+                padding: 0.5rem 0.75rem;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+
+            .open-tab:hover {
+                background: #444;
+            }
+
+            .create-email-popup {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 9990;
+            }
+
+            .email-popup-button {
+                margin-left: 1rem;
+                cursor: pointer;
+                color: var(--text-primary-color);
+                border: 2px solid var(--border-secondary-color);
+                background-color: var(--alt-surface-color);
+                padding-top: 7px;
+                padding-bottom: 7px;
+                padding-left: 15px;
+                padding-right: 15px;
+                border-radius: 12px;
+                font-weight: bold;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            .email-popup-button:hover {
+                background-color: #272727;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="site-container">
+            <div class="another-container">
+                <aside class="sidebar">
+                    <a href="" class="logo-link" disabled><h1 class="logo">Ripple</h1></a>
+                    <nav>
+                        <a href="" class="nav-item active" disabled>Inbox</a>
+                        <a href="" class="nav-item disabled" disabled>Sent</a>
+                        <a href="" class="nav-item disabled" disabled>Drafts</a>
+                        <a href="" class="nav-item disabled" disabled>Trash</a>
+                    </nav>
+                </aside>
+
+                <main class="main-container">
+                    <div class="inbox-container">
+                        <main class="main">
+                            <header class="topbar">
+                                <input class="search" type="text" placeholder="Search mail..." readonly />
+                                <button class="email-popup-button" type="button">Send Email</button>
+                                <div class="profile">AB</div>
+                            </header>
+
+                            <section class="main-content">
+                                <div class="email-list">
+                                    <div class="email-item unread" role="none">
+                                        <div class="email-sender">From: example~ripple.com</div>
+                                        <div class="email-content">
+                                            <div class="email-subject">Another subject</div>
+                                            <div class="email-snippet">This is the second email.</div>
+                                        </div>
+                                        <div class="email-time" title="20/12/2012, 03:00:18">34 seconds ago</div>
+                                    </div>
+                                    <div class="email-item read" role="none">
+                                        <div class="email-sender">From: test2~ripple.com</div>
+                                        <div class="email-content">
+                                            <div class="email-subject">Test subject</div>
+                                            <div class="email-snippet">This is the first email.</div>
+                                        </div>
+                                        <div class="email-time" title="20/12/2012, 03:00:00">52 seconds ago</div>
+                                    </div>
+                                </div>
+
+                                <div class="drag-handle" role="none"></div>
+
+                                <div class="reading-pane">
+                                    <div class="pane-header">
+                                        <h2>Test subject</h2>
+                                        <a class="open-tab" href="javascript:void(0)">Open in new tab</a>
+                                    </div>
+                                    <h4>From: test2~ripple.com</h4>
+                                    <p>This is the first email.<br />
+                                    This is another line of that email.</p>
+                                </div>
+                            </section>
+                        </main>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </body>
+</html>

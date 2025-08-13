@@ -8,6 +8,9 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 	}
+    interface Window {
+        createNotification?: (title: string, message: string, color: string) => void;
+    }
 }
 
 export {};
