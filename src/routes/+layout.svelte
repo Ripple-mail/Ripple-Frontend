@@ -1,33 +1,69 @@
 <script lang="ts">
-	import '../app.css';
-	import Navbar from '$lib/components/Navbar.svelte';
-	import Footer from '$lib/components/Footer.svelte';
+	import favicon from '$lib/assets/favicon.png';
+	import { onMount } from 'svelte';
+	import { api } from '$lib/api';
+	import { user } from '$lib/stores/user';
+	import { goto } from '$app/navigation';
+
+	onMount(async () => {
+		if (!$user) {
+			try {
+				const response = (await api.get('/profile')) as {
+					status: string;
+					user?: import('$lib/stores/user').JwtUser;
+				};
+				if (response.status === 'success' && response.user) {
+					user.set(response.user);
+				}
+			} catch {
+				console.error('Not logged in');
+				user.set(null);
+			}
+		}
+	});
+
+	async function logout() {
+		try {
+			await api.post('/logout', {});
+		} catch (e) {
+			console.error('Logout failed, proceeding to clear state.', e);
+		} finally {
+			user.set(null);
+			await goto('/login');
+		}
+	}
+
 	let { children } = $props();
 </script>
 
-<div class="site-container">
-	<Navbar />
-	<main class="container">
-		{@render children()}
-	</main>
-	<Footer />
-</div>
+<svelte:head>
+	<link rel="icon" href={favicon} />
+</svelte:head>
+
+<header>
+	<nav>
+		{#if $user}
+			<span>Welcome, {$user.username}!</span>
+			<button onclick={logout}>Logout</button>
+		{:else}
+			<a href="/login">Login</a>
+			<a href="/register">Register</a>
+		{/if}
+	</nav>
+</header>
+
+<main>
+	{@render children?.()}
+</main>
 
 <style>
-	.site-container {
+	header {
+		padding: 1rem;
+		border-bottom: 1px solid #ccc;
+	}
+	nav {
 		display: flex;
-		flex-direction: column;
-		min-height: 100vh;
-	}
-	main {
-		flex: 1;
-		margin-top: 80px !important;
-	}
-	.container {
-		font-family: Barlow, serif;
-		width: 100%;
-		max-width: 1600px;
-		margin: 0 auto;
-		padding: 0 1.5rem;
+		gap: 1rem;
+		align-items: center;
 	}
 </style>

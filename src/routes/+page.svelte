@@ -1,58 +1,30 @@
 <script lang="ts">
-	let count = $state(0);
+	import type { PageData } from './$types';
 
-	function handleClick(isLMB: boolean) {
-		if (isLMB) {
-			count += 1;
-		} else {
-			count -= 1;
-		}
-	}
+	export let data: PageData;
 </script>
 
-<svelte:head>
-	<title>Button :skull:</title>
-</svelte:head>
+<h1>Your Inbox</h1>
 
-<div class="main">
-	<button
-		onclick={() => handleClick(true)}
-		oncontextmenu={(event) => {
-			event.preventDefault();
-			handleClick(false);
-		}}
-	>
-		Press this!
-	</button>
-
-	<div class="counter">
-		<p>Count: {count}</p>
-		<p class="tip">Tip: Try left clicking on the button</p>
-	</div>
-</div>
+{#if data.emails && data.emails.length > 0}
+	<ul>
+		{#each data.emails as email (email.id)}
+			<li>
+				<strong>From:</strong>
+				{email.from_address || 'N/A'} <br />
+				<strong>Subject:</strong>
+				{email.subject || '(no subject)'}
+			</li>
+		{/each}
+	</ul>
+{:else}
+	<p>Your inbox is empty.</p>
+{/if}
 
 <style>
-	.main {
-		background-color: var(--alt-surface-color);
-		border: 1px solid var(--border-color);
-		border-radius: 4px;
-		padding: 15px;
-		margin-top: 16px;
-	}
-	.counter {
-		margin-top: 20px;
-	}
-
-	.tip {
-		color: var(--text-secondary-color);
-	}
-	button {
-		padding: 10px 15px;
-		border: none;
-		border-radius: 4px;
-		color: var(--text-primary-color);
-		cursor: pointer;
-		margin-top: 10px;
-		background-color: var(--primary-color);
+	li {
+		list-style-type: none;
+		padding: 0.5rem;
+		border-bottom: 1px solid #eee;
 	}
 </style>
