@@ -1,30 +1,26 @@
 <script lang="ts">
-	import type { PageData } from './$types';
-
-	export let data: PageData;
+	import { auth } from '$lib/stores/auth';
 </script>
 
-<h1>Your Inbox</h1>
+<div class="frontpage">
+    {#if $auth.user}
+		<h1>Hello, {$auth.user.username}!</h1>
+	{/if}
+	<h2>Welcome to Ripple</h2>
+    <p>Use the navigation options above to log in, register or expolore your inbox if you are already logged in.</p>
 
-{#if data.emails && data.emails.length > 0}
-	<ul>
-		{#each data.emails as email (email.id)}
-			<li>
-				<strong>From:</strong>
-				{email.from_address || 'N/A'} <br />
-				<strong>Subject:</strong>
-				{email.subject || '(no subject)'}
-			</li>
-		{/each}
-	</ul>
-{:else}
-	<p>Your inbox is empty.</p>
-{/if}
+	
+</div>
 
 <style>
-	li {
-		list-style-type: none;
-		padding: 0.5rem;
-		border-bottom: 1px solid #eee;
+	.frontpage {
+		text-align: center;
+		padding: 3rem 1rem;
+		max-width: 600px;
+		margin: 0 auto;
+	}
+	p {
+		color: #555;
+		font-size: 1.1rem;
 	}
 </style>

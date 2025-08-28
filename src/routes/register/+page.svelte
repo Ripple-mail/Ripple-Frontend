@@ -2,13 +2,14 @@
 	import { api } from '$lib/api';
 	import { goto } from '$app/navigation';
 
-	let username = '';
-	let email = '';
-	let password = '';
-	let error = '';
-	let success = '';
 
-	let emailError = '';
+	let username = $state('');
+	let email = $state('');
+	let password = $state('');
+	let error = $state('');
+	let success = $state('');
+
+	let emailError = $state('');
 
 	const emailRegex = /^[^~]+~[^~]+$/;
 
@@ -17,10 +18,8 @@
 		error?: string;
 	}
 
-	async function register() {
-		error = '';
-		success = '';
-		emailError = '';
+	async function register(event: SubmitEvent) {
+		event.preventDefault();
 
 		if (!emailRegex.test(email)) {
 			emailError = 'Email must be in the format username~domain.com (use a tilde ~ instead of @)';
@@ -47,7 +46,7 @@
 
 <h1>Register</h1>
 
-<form on:submit|preventDefault={register}>
+<form onsubmit={register}>
 	<label>
 		Username
 		<input type="text" bind:value={username} required />
@@ -59,7 +58,7 @@
 			bind:value={email}
 			required
 			placeholder="username~domain.com"
-			on:input={() => {
+			oninput={() => {
 				emailError = emailRegex.test(email)
 					? ''
 					: 'Email must be in the format username~domain.com (use a tilde ~ instead of @)';
