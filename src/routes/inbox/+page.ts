@@ -2,23 +2,21 @@ import { redirect } from '@sveltejs/kit';
 import { auth } from '$lib/stores/auth';
 import { get } from 'svelte/store';
 import type { PageLoad } from './$types';
-import { api } from '$lib/api';
-import type { Email } from '$lib/types';
+import { browser } from '$app/environment';
 
-export const load: PageLoad = async () => {
-	const { user } = get(auth);
+export const load: PageLoad = async ({ url, parent }) => {
+	await parent();
+	if (browser) {
+		const { user } = get(auth);
 
-	if (!user) {
-		throw redirect(307, '/login');
+		if (!user) {
+			throw redirect(307, '/login');
+		}
 	}
 
-	try {
-		const response = (await api.get('/emails')) as { data: { emails: Email }[] };
-		const emails: Email[] = response.data.map((item) => item.emails);
+	const mailboxId = url.searchParams.get('mailboxId');
 
-		return { emails };
-	} catch (error) {
-		console.error('Failed to fetch emails:', error);
-		return { emails: [] };
-	}
+	return {
+		mailboxId: mailboxId ? parseInt(mailboxId, 10) : null
+	};
 };

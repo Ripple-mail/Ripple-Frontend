@@ -4,41 +4,42 @@
 	import { goto } from '$app/navigation';
 	import { notice } from '$lib/stores/notice';
 
+	let { children, data } = $props();
+
 	async function logout() {
 		auth.logout();
 		await goto('/');
 	}
-
-	let { children } = $props();
 </script>
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
 </svelte:head>
 
-<header>
-	<nav>
-		{#if $auth.user}
-			<a href="/inbox">Inbox</a>
-			<a href="/compose">Compose</a>
-			<button onclick={logout}>Logout</button>
-		{:else}
-			<a href="/login">Login</a>
-			<a href="/register">Register</a>
-		{/if}
-	</nav>
-</header>
+{#if data.initialized}
+	<header>
+		<nav>
+			{#if $auth.user}
+				<a href="/inbox">Inbox</a>
+				<a href="/compose">Compose</a>
+				<button onclick={logout}>Logout</button>
+			{:else}
+				<a href="/login">Login</a>
+				<a href="/register">Register</a>
+			{/if}
+		</nav>
+	</header>
 
-{#if $notice}
-	<div class="notice">
-		{$notice}
-	</div>
+	{#if $notice}
+		<div class="notice">
+			{$notice}
+		</div>
+	{/if}
+
+	<main>
+		{@render children?.()}
+	</main>
 {/if}
-
-<main>
-	{@render children?.()}
-</main>
-
 
 <style>
 	.notice {

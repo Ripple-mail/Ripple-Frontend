@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
+import { api } from '$lib/api';
 
 export interface JwtUser {
     id: number;
@@ -33,10 +34,24 @@ export const auth = {
         }
         set({ user: null, token: null });
     },
-    setUser: (user: JwtUser) => {
-        set({
-            user,
-            token: browser ? window.localStorage.getItem('jwt') : null
-        });
+    initialize: async () => {
+        const token = window.localStorage.getItem('jwt');
+        if (token) {
+            try {
+                const response = (await api.get('/profile')) as { user: JwtUser };
+                if (response.user) {
+                    set({ user: response.user, token });
+                } else {
+                    auth.logout();
+                }
+            } catch (error) {
+                console.error('Failed to fetch profile:', error);
+                auth.logout();
+            }
+        }
     }
 };
+
+if (browser) {
+    auth.initialize();
+}
