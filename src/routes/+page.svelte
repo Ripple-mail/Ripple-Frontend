@@ -11,6 +11,12 @@
         <a href="login">Login</a>
     {/if}
 </header>
+
+<div class="banner">
+    Ripple is moving domains soon! The new domain will be
+    <a href="https://ripplemail.de" target="_blank">ripplemail.de</a>
+</div>
+
 <div class="homepage-container">
     <h1>Ripple</h1>
 
@@ -62,6 +68,15 @@
 		font-size: 0.9rem;
 		cursor: pointer;
 	}
+
+    .banner {
+        background-color: #FDFD96;
+        color: black;
+        text-align: center;
+        padding: 0.5rem;
+        font-weight: bold;
+        border-bottom: 2px solid var(--border-primary-color);
+    }
 
     .homepage-container {
         width: 100vw;
