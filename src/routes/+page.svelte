@@ -70,12 +70,11 @@
 	}
 
     .banner {
-        background-color: #FDFD96;
+        background-color: #ffff4f;
         color: black;
         text-align: center;
         padding: 0.5rem;
         font-weight: bold;
-        border-bottom: 2px solid var(--border-primary-color);
     }
 
     .homepage-container {
