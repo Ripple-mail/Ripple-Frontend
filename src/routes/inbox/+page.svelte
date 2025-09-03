@@ -20,11 +20,11 @@
 			const url = mailboxId ? `/emails?mailboxId=${mailboxId}` : '/emails';
 			const response = (await api.get(url)) as { data: any[] };
 
-			emails = response.data.map((item) => ({
-				...item.emails,
-				...item.user_emails,
-				recipients: item.recipients
-			}));
+			   emails = response.data.map((item) => ({
+				   ...item.user_emails,
+				   ...item.emails,
+				   recipients: item.recipients
+			   }));
 		} catch (e) {
 			error = e instanceof Error ? e.message : 'Failed to fetch emails.';
 			if (error.includes('Invalid token')) {
@@ -95,19 +95,23 @@
 		{:else}
 			<ul>
 				{#each emails as email (email.id)}
-					<li>
-						{#if email.isSender}
-							<strong>To:</strong>
-							{email.recipients?.join(', ') || 'N/A'} <br />
-						{:else}
-							<strong>From:</strong>
-							{email.fromAddress || 'N/A'} <br />
-						{/if}
-
-						<strong>Subject:</strong>
-						{email.subject || '(no subject)'}
-						<p>{email.body_text?.substring(0, 100) || ''}...</p>
-					</li>
+				<li class:unread={!email.isRead} class:read={email.isRead}>
+					<a href={`/email/${email.id}`} class="email-link">
+						<div class="email-row">
+							<span class="read-indicator" title={email.isRead ? 'Read' : 'Unread'}></span>
+							{#if email.isSender}
+								<strong>To:</strong>
+								{email.recipients?.join(', ') || 'N/A'} <br />
+							{:else}
+								<strong>From:</strong>
+								{email.fromAddress || 'N/A'} <br />
+							{/if}
+							<strong>Subject:</strong>
+							{email.subject || '(no subject)'}
+							<p>{email.bodyText?.substring(0, 100) || ''}...</p>
+						</div>
+					</a>
+				</li>
 				{/each}
 			</ul>
 		{/if}
@@ -141,7 +145,38 @@
 		border-bottom: 1px solid #eee;
 		cursor: pointer;
 	}
-	li:hover {
-		background-color: #f9f9f9;
+	li.unread {
+		font-weight: bold;
+		background-color: #f8f9fa;
 	}
+	li.read {
+		border-left: 6px solid #2196f3;
+		background-color: #e3f2fd;
+	}
+	.read-indicator {
+		display: inline-block;
+		width: 10px;
+		height: 10px;
+		border-radius: 50%;
+		margin-right: 8px;
+		background: #2196f3;
+		opacity: 0.7;
+		vertical-align: middle;
+	}
+	li.unread .read-indicator {
+		background: #bdbdbd;
+		opacity: 0.5;
+	}
+	.email-row {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+	li:hover {
+		background-color: #f0f0f0;
+	}
+    .email-link {
+        text-decoration: none;
+        color: inherit;
+    }
 </style>

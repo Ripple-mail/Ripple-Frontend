@@ -17,6 +17,6 @@ export const load: PageLoad = async ({ url, parent }) => {
 	const mailboxId = url.searchParams.get('mailboxId');
 
 	return {
-		mailboxId: mailboxId ? parseInt(mailboxId, 10) : null
+		mailboxId: mailboxId ? mailboxId : null
 	};
 };
