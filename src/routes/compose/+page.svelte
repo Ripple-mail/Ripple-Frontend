@@ -11,7 +11,7 @@
 	let isSending = $state(false);
 
 	async function sendEmail(event: SubmitEvent) {
-		event.preventDefault(); 
+		event.preventDefault();
 		error = '';
 		success = '';
 

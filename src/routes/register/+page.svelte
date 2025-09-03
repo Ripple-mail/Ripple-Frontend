@@ -2,7 +2,6 @@
 	import { api } from '$lib/api';
 	import { goto } from '$app/navigation';
 
-
 	let username = $state('');
 	let email = $state('');
 	let password = $state('');
