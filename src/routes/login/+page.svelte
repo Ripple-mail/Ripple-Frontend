@@ -8,7 +8,7 @@
 	let error = $state('');
 
 	interface LoginResponse {
-		status: string;
+		status: 'success' | 'error' | 'mfa_required';
 		error?: string;
 		token?: string;
 	}
