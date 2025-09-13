@@ -1,28 +1,40 @@
-export interface Recipient {
+export interface UserEmail {
 	id: string;
-	address: string | null;
-	type: 'to' | 'cc' | 'bcc';
+	userid: string;
+	emailid: string;
+	mailboxid: string;
+	isSender: boolean;
+	isRead: boolean;
+	isStarred: boolean;
+	createdAt: string;
+	trashSince: string | null;
+	updatedAt: string;
+	deletedAt: string | null;
+	email: Email;
 }
 
 export interface Email {
 	id: string;
-	subject: string | null;
-	bodyText: string | null;
-	fromAddress: string | null;
+	senderid: string;
+	fromAddress: string;
+	messageid: string;
+	subject: string;
+	date: string;
+	bodyText: string;
 	createdAt: string;
-	isRead: boolean;
-	isStarred: boolean | null;
-	isSender?: boolean;
-	recipients: Recipient[];
+	updatedAt: string;
+	deletedAt: string | null;
+	searchVector: string | null;
+	recipients: Recipient;
 }
 
-export interface UserEmail {
+export interface Recipient {
 	id: string;
-	isRead: boolean;
-	isSender: boolean;
-	email: Email;
+	emailid: string;
+	userid: string;
+	address: string;
+	type: 'to' | 'cc' | 'bcc';
 }
-
 
 export interface Mailbox {
 	id: string;

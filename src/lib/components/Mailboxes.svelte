@@ -8,7 +8,7 @@
 	let mailboxes: Mailbox[] = $state([]);
 	let newMailboxName = $state('');
 	let error = $state('');
-	let editingMailboxId: number | null = $state(null);
+	let editingMailboxId: string | null = $state(null);
 	let editingMailboxName = $state('');
 
 	async function fetchMailboxes() {
@@ -34,7 +34,7 @@
 		}
 	}
 
-	async function handleUpdateMailbox(mailboxId: number) {
+	async function handleUpdateMailbox(mailboxId: string) {
 		if (!editingMailboxName.trim()) return;
 		try {
 			await api.put(`/mailboxes/${mailboxId}`, { name: editingMailboxName });
@@ -47,7 +47,7 @@
 		}
 	}
 
-	async function deleteMailbox(mailboxId: number) {
+	async function deleteMailbox(mailboxId: string) {
 		if (!confirm('Are you sure you want to delete this mailbox? This action cannot be undone.')) {
 			return;
 		}

@@ -11,12 +11,18 @@
 			<p><strong>From:</strong> {data.email.email.fromAddress}</p>
 			<p>
 				<strong>To:</strong>
-				{data.email.email.recipients?.filter((r) => r.type === 'to').map((r) => r.address).join(', ')}
+				{data.email.email.recipients
+					?.filter((r) => r.type === 'to')
+					.map((r) => r.address)
+					.join(', ')}
 			</p>
 			{#if data.email.email.recipients?.some((r) => r.type === 'cc')}
 				<p>
 					<strong>Cc:</strong>
-					{data.email.email.recipients?.filter((r) => r.type === 'cc').map((r) => r.address).join(', ')}
+					{data.email.email.recipients
+						?.filter((r) => r.type === 'cc')
+						.map((r) => r.address)
+						.join(', ')}
 				</p>
 			{/if}
 			<p><strong>Date:</strong> {new Date(data.email.email.createdAt).toLocaleString()}</p>
