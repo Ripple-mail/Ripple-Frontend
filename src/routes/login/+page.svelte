@@ -18,11 +18,29 @@
 		user?: JwtUser;
 	}
 
+    function getDeviceFingerprint() {
+        const { userAgent, language, platform } = navigator;
+        const screenSize = `${screen.width}x${screen.height}`;
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+        return `${userAgent}|${language}|${platform}|${screenSize}|${timezone}`;
+    }
+
+    async function hashFingerprint(fingerprint: string) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(fingerprint);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
 	async function login(event: SubmitEvent) {
 		event.preventDefault();
 		error = '';
 		try {
-			const response = (await api.post('/login', { identifier, password })) as LoginResponse;
+            const deviceFingerprint = await hashFingerprint(getDeviceFingerprint());
+			const response = (await api.post('/login', { identifier, password, deviceFingerprint })) as LoginResponse;
 			if (response.status === 'success' && response.token) {
 				const profile = (await api.get('/profile')) as ProfileResponse;
 				if (profile.status === 'success' && profile.user) {
