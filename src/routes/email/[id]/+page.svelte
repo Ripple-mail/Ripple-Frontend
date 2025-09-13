@@ -11,18 +11,28 @@
 			<p><strong>From:</strong> {data.email.email.fromAddress}</p>
 			<p>
 				<strong>To:</strong>
-				{data.email.email.recipients
-					?.filter((r) => r.type === 'to')
-					.map((r) => r.address)
-					.join(', ')}
+				{Array.isArray(data.email.email.recipients)
+					? data.email.email.recipients
+						.filter((r) => r.type === 'to')
+						.map((r) => r.address)
+						.join(', ')
+					: data.email.email.recipients?.type === 'to'
+						? data.email.email.recipients.address
+						: ''}
 			</p>
-			{#if data.email.email.recipients?.some((r) => r.type === 'cc')}
+			{#if (Array.isArray(data.email.email.recipients)
+				? data.email.email.recipients.some((r) => r.type === 'cc')
+				: data.email.email.recipients?.type === 'cc')}
 				<p>
 					<strong>Cc:</strong>
-					{data.email.email.recipients
-						?.filter((r) => r.type === 'cc')
-						.map((r) => r.address)
-						.join(', ')}
+					{Array.isArray(data.email.email.recipients)
+						? data.email.email.recipients
+							.filter((r) => r.type === 'cc')
+							.map((r) => r.address)
+							.join(', ')
+						: data.email.email.recipients?.type === 'cc'
+							? data.email.email.recipients.address
+							: ''}
 				</p>
 			{/if}
 			<p><strong>Date:</strong> {new Date(data.email.email.createdAt).toLocaleString()}</p>

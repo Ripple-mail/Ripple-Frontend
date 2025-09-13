@@ -1,8 +1,8 @@
 export interface UserEmail {
 	id: string;
-	userid: string;
-	emailid: string;
-	mailboxid: string;
+	userId: string;
+	emailId: string;
+	mailboxId: string;
 	isSender: boolean;
 	isRead: boolean;
 	isStarred: boolean;

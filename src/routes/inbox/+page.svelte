@@ -108,7 +108,7 @@
 			<ul>
 				{#each emails as email}
 					<li class:unread={!email.isRead} class:read={email.isRead}>
-						<a href={`/email/${email.emailid}`} class="email-link">
+						<a href={`/email/${email.emailId}`} class="email-link">
 							<div class="email-row">
 								<span class="read-indicator" title={email.isRead ? 'Read' : 'Unread'}></span>
 								{#if email.isSender ?? false}
