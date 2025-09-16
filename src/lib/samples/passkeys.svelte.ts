@@ -5,7 +5,6 @@ interface VerifiedData {
 
 // IMPLEMENTATION
 import { api } from '$lib/api';
-let userId = 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa';
 let email = 'test~ripplemail.de';
 
 function bufferToBase64url(buffer: ArrayBuffer): string {
@@ -28,7 +27,7 @@ function base64urlToUint8Array(base64Url: string): Uint8Array {
 
 // Enable passkeys
 async function startPasskeyRegistration() {
-    const options = await api.post<any>('/auth/webauthn/generate-registration-options', { userId });
+    const options = await api.post<any>('/auth/webauthn/generate-registration-options', {});
 
     options.challenge = Uint8Array.from(atob(options.challenge.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
     options.user.id = Uint8Array.from(atob(options.user.id.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
@@ -64,7 +63,7 @@ async function startPasskeyRegistration() {
         type: credential.type
     }
 
-    const verifyData = await api.post<VerifiedData>('/auth/webauthn/verify-registration', { userId, credential: attestationResponse });
+    const verifyData = await api.post<VerifiedData>('/auth/webauthn/verify-registration', { credential: attestationResponse });
     if (verifyData.verified) {
         // Possibly do something if successful
     } else {
